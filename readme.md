@@ -1,6 +1,6 @@
 # LinkedIn Alumni Data Scraper
 
-This project is a Python-based script designed to scrape alumni profile data (Name, Company, and Job Title) from LinkedIn. It is specifically tailored for educational and research purposes, complying with LinkedIn's terms of use.
+This project is a Python-based script designed to scrape IIT alumni profile data (Name, Company, and Job Title) from LinkedIn. It is specifically tailored for educational and research purposes, complying with LinkedIn's terms of use.
 
 ## Features
 
