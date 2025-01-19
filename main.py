@@ -87,7 +87,8 @@ def login_to_linkedin(driver, email, password):
     driver.find_element(By.ID, "username").send_keys(email)
     driver.find_element(By.ID, "password").send_keys(password)
     driver.find_element(By.CLASS_NAME, "btn__primary--large").click()
-    time.sleep(10)
+
+    time.sleep(10) # This is the code to pause the execution when captcha occurs.
 
 def process_alumni_data(driver, alumni_page_url):
     driver.get(alumni_page_url)
