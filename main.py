@@ -24,4 +24,7 @@ password_field.send_keys(password)
 signin_button = driver.find_element(By.CLASS_NAME, "btn__primary--large")
 signin_button.click()
 
-time.sleep(10)
+alumni_page_url = get_iit_delhi_url()
+driver.get(alumni_page_url)
+
+time.sleep(5)
