@@ -87,7 +87,25 @@ driver = uc.Chrome(service=service)
 email = get_email()
 password = get_password()
 
-driver.get("https://linkedin.com")
+max_retries = 3
+retry_count = 0
+
+while retry_count < max_retries:
+    try:
+        driver.get("https://linkedin.com")
+        break
+    except Exception as e:
+        retry_count += 1
+        if "ConnectionError" in str(e) or "TimeoutError" in str(e):
+            print(f"Network issue detected. Attempt {retry_count} of {max_retries}. Retrying...")
+            time.sleep(5)
+        else:
+            print("An unexpected error occurred:", str(e))
+            exit(1)
+
+if retry_count == max_retries:
+    print("Max retries reached. Please check your internet connection and try again later.")
+    exit(1)
 
 signin_element = driver.find_element(By.CLASS_NAME, "nav__button-secondary")
 signin_element.click()
