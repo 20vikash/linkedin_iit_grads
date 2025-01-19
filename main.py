@@ -4,6 +4,18 @@ from selenium.webdriver.common.by import By
 from read_env import *
 import time
 
+def scroll_alumni_page(driver):
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
+    
+    return driver.page_source
+
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
 
@@ -27,4 +39,5 @@ signin_button.click()
 alumni_page_url = get_iit_delhi_url()
 driver.get(alumni_page_url)
 
-time.sleep(5)
+alumunus = scroll_alumni_page(driver)
+print(alumunus)
