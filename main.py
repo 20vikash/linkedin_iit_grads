@@ -1,5 +1,7 @@
 # type: ignore
 
+# TODO: Improve the undetectability by rotating IP's with proxies.
+
 import undetected_chromedriver as uc
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
