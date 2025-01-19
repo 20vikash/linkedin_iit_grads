@@ -1,6 +1,6 @@
 # type: ignore
 
-from selenium import webdriver
+import undetected_chromedriver as uc
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -8,6 +8,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from read_env import *
 import time
+import csv
+
+def write_to_csv(data, file_name="linkedin_data_2.csv"):
+    with open(file_name, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        
+        if file.tell() == 0:
+            writer.writerow(["Name", "Company", "Post"])
+        
+        writer.writerow(data)
 
 def scroll_alumni_page(driver):
     count = 0
@@ -16,7 +26,7 @@ def scroll_alumni_page(driver):
         count += 1
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(2)
-        if count == 10:
+        if count == 20:
             break
     
     return driver.page_source
@@ -48,6 +58,9 @@ def get_company_and_post(job):
     
 def write_data(html):
     soup = BeautifulSoup(html, "lxml")
+
+    name_div = soup.find("div", class_="pwvoXWdekMutuFrtXlPtIrLjWHgnWkwvzdVVis")
+    name = name_div.find("h1").text
     
     headings = soup.find_all("div", class_="iRQlucHUKclOVnnLzGCMMOriIYNHADAA")
 
@@ -62,13 +75,14 @@ def write_data(html):
             for job in jobs:
                 company, post = get_company_and_post(job)
                 if len(post) > 1:
-                    print("Company: {}, post: {}".format(company, post))
+                    print("Name: {}, Company: {}, post: {}".format(name, company, post))
+                    write_to_csv([name.strip(), company.strip(), post.strip()])
 
         else:
             continue
 
 service = Service(executable_path="./chromedriver")
-driver = webdriver.Chrome(service=service)
+driver = uc.Chrome(service=service)
 
 email = get_email()
 password = get_password()
@@ -87,7 +101,9 @@ password_field.send_keys(password)
 signin_button = driver.find_element(By.CLASS_NAME, "btn__primary--large")
 signin_button.click()
 
-alumni_page_url = get_iit_delhi_url()
+time.sleep(10)
+
+alumni_page_url = get_iit_madras_url()
 driver.get(alumni_page_url)
 
 alumunus = scroll_alumni_page(driver)
@@ -114,6 +130,5 @@ for person in people:
 
         except Exception as e:
             pass
-        
     else:
         continue
